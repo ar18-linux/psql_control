@@ -1,0 +1,21 @@
+# Last value is picked up.
+C:/Users/aremus/D10/dbs/tds_live_2021_02_24
+C:/Users/aremus/D10/dbs/tds_live_2021_02_26
+C:/Users/aremus/D10/dbs/tds_live_2021_03_01
+C:/Users/aremus/D10/dbs/tds_live_2021_03_02
+
+C:/Users/aremus/D10/dbs/tds_local_duplicates_stage2
+C:/Users/aremus/D10/dbs/tds_live_2021_03_02
+C:/Users/aremus/D10/dbs/tds_local_big_cleanup
+C:/Users/aremus/D10/dbs/tds_live_2021_03_02 4567
+C:/Users/aremus/D10/dbs/db_fixes_2021_03_04_12_02 4568
+C:/Users/aremus/D10/dbs/db_fixes_2021_03_04_15_51 4568
+C:/Users/aremus/D10/dbs/tds_live_2021_03_02 4568
+C:/Users/aremus/D10/dbs/tds_live_2021_03_02_translatins 4568
+C:/Users/aremus/D10/dbs/tds_live_2021_02_24 4567
+C:/Users/aremus/D10/dbs/tds_live_2021_03_26 2000
+C:/Users/aremus/D10/dbs/tds_live_2021_04_12 7777
+local_2021_04_14_19_29 2000
+
+
+
