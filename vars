@@ -1,14 +1,2 @@
-# Path to 7z
-_7za=7za
-
-# Psql path
-psql_dir=/usr
-
-# Path to db to operate one
-ram_db_dir=/home/nulysses/dbs
-
-# Path to backed up dbs
-target=/home/nulysses/dbs_dumps
-
-# Database user
-db_user=postgres
+install_dir="/opt/ar18"
+module_name="psql_control"
