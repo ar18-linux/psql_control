@@ -15,7 +15,7 @@ C:/Users/aremus/D10/dbs/tds_live_2021_03_02_translatins 4568
 C:/Users/aremus/D10/dbs/tds_live_2021_02_24 4567
 C:/Users/aremus/D10/dbs/tds_live_2021_03_26 2000
 C:/Users/aremus/D10/dbs/tds_live_2021_04_12 7777
-local_2021_04_14_19_29 2000
+local_2021_04_28_08_39 7777
 
 
 
