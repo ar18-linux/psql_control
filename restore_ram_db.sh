@@ -52,7 +52,7 @@ function restore(){
   
   rm -rf "${ram_db}"
   
-  mkdir "${ram_db}"
+  mkdir -p "${ram_db}"
   chown "${db_user}" "${ram_db}"
   
   su - "${db_user}" -c "${_7za} x -bsp1 ${target}/${source}.7z -aoa -o${ram_db}" 

@@ -5,7 +5,7 @@ _7za=7za
 psql_dir=/usr
 
 # Path to db to operate one
-ram_db_dir=/dev/shm/db
+ram_db_dir=/home/nulysses/dbs
 
 # Path to backed up dbs
 target=/home/nulysses/dbs_dumps
