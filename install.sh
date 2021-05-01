@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [[ "$(whoami)" != "root" ]]; then
   read -p "[ERROR] must be root!"
   exit 1
