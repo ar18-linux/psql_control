@@ -52,7 +52,7 @@ function start(){
 function run(){
   init_vars
   sanity_check
-  restore
+  start
 }
 
 
