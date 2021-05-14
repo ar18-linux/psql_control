@@ -68,8 +68,10 @@ function backup(){
 function run(){
   init_vars
   sanity_check
-  backup
+  db_name="$1"
+  backup_path="$2"
+  backup "${db_name}" "${backup_path}"
 }
 
 
-run
+run "$@"

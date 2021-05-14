@@ -75,9 +75,11 @@ function restore(){
 function run(){
   init_vars
   sanity_check
-  restore
+  db_name="$1"
+  backup_path="$2"
+  restore "${db_name}" "${backup_path}"
 }
 
 
-run
+run "$@"
 

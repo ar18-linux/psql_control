@@ -16,6 +16,9 @@ C:/Users/aremus/D10/dbs/tds_live_2021_02_24 4567
 C:/Users/aremus/D10/dbs/tds_live_2021_03_26 2000
 C:/Users/aremus/D10/dbs/tds_live_2021_04_12 7777
 local_2021_04_28_08_39 2222
+# New format
+# db_name path_to_existing_db free_port
+"personal" "/home/nulysses/dbs/2222" 2222
 
 
 
