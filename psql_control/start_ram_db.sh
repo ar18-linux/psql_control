@@ -40,32 +40,34 @@ function start(){
   db_name_requested="$1"
   if [ "${db_name_requested}" = "" ]; then
     str="$(grep '[[:alnum:]]' "${path_db_meta}" | tail -n 1 | xargs)"
+    declare -A lines
+    lines[0]=str
+  elif [ "${db_name_requested}" = "all" ]; then
+    IFS=$'\r\n' GLOBIGNORE='*' command eval "lines=(\$(cat "${path_db_meta}"))"
+    str="${db_name_requested}"
   else
     set +e
     str="$(cat "${path_db_meta}" | grep "${db_name_requested}")"
     set -e
+    declare -A lines
+    lines[0]="${str}"
   fi
-  if [ "${str}" = "" ]; then
+  if [ "${lines[0]}" = "" ]; then
     read -p "db not found: [${db_name_requested}]"
     exit 1
   fi
-  stringarray=($str)
-  source="${stringarray[1]}"
-  port="${stringarray[2]}"
-  sub_dir="default"
+  read -p "start ${str}?"
   pg_ctl="${psql_dir}/bin/pg_ctl"
+  for line in "${lines[@]}"; do
+    trimmed="$(echo $line | xargs)"
+    if [ "${trimmed:0:1}" != "#" ]; then
+      stringarray=($trimmed)
+      source="${stringarray[1]}"
+      nohup su - "${db_user}" -c "${pg_ctl} -D ${source} start" &
+    fi
+  done
   
-  if [ -n "$port" ]; then
-    sub_dir="${port}"
-  fi
-  
-  ram_db="${ram_db_dir}/${sub_dir}"
-  echo "start ${str}?"
-  #echo -ne '' | nohup "${pg_ctl}" -D "${ram_db}" start & >/dev/null 2>&1 &
-  nohup su - "${db_user}" -c "${pg_ctl} -D ${ram_db} start" &
-  #echo "${pg_ctl} -D ${ram_db} start &" | at now
-  
-  read -p "Press a key"
+  read -p "Started, press a key"
 }
 
 

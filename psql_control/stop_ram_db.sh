@@ -37,27 +37,37 @@ function sanity_check(){
 
 function stop(){
   echo stop
-  pg_ctl="${psql_dir}/bin/pg_ctl"
-  
   db_name_requested="$1"
   if [ "${db_name_requested}" = "" ]; then
     str="$(grep '[[:alnum:]]' "${path_db_meta}" | tail -n 1 | xargs)"
+    declare -A lines
+    lines[0]=str
+  elif [ "${db_name_requested}" = "all" ]; then
+    IFS=$'\r\n' GLOBIGNORE='*' command eval "lines=(\$(cat "${path_db_meta}"))"
+    str="${db_name_requested}"
   else
     set +e
     str="$(cat "${path_db_meta}" | grep "${db_name_requested}")"
     set -e
+    declare -A lines
+    lines[0]="${str}"
   fi
-  if [ "${str}" = "" ]; then
+  if [ "${lines[0]}" = "" ]; then
     read -p "db not found: [${db_name_requested}]"
     exit 1
   fi
-  
-  stringarray=($str)
-  source="${stringarray[1]}"
-  
-  read -p "stop ${db_name_requested}?"
-  
-  su - "${db_user}" -c "${pg_ctl} -D ${source} stop -m f"
+  read -p "stop ${str}?"
+  pg_ctl="${psql_dir}/bin/pg_ctl"
+  for line in "${lines[@]}"; do
+    trimmed="$(echo $line | xargs)"
+    if [ "${trimmed:0:1}" != "#" ]; then
+      stringarray=($trimmed)
+      source="${stringarray[1]}"
+      set +e
+      su - "${db_user}" -c "${pg_ctl} -D ${source} stop -m f"
+      set -e
+    fi
+  done
   
   read -p "Stopped, press a key"
 }

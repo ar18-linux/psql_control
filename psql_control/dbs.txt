@@ -1,24 +1,8 @@
-# Last value is picked up.
-C:/Users/aremus/D10/dbs/tds_live_2021_02_24
-C:/Users/aremus/D10/dbs/tds_live_2021_02_26
-C:/Users/aremus/D10/dbs/tds_live_2021_03_01
-C:/Users/aremus/D10/dbs/tds_live_2021_03_02
-
-C:/Users/aremus/D10/dbs/tds_local_duplicates_stage2
-C:/Users/aremus/D10/dbs/tds_live_2021_03_02
-C:/Users/aremus/D10/dbs/tds_local_big_cleanup
-C:/Users/aremus/D10/dbs/tds_live_2021_03_02 4567
-C:/Users/aremus/D10/dbs/db_fixes_2021_03_04_12_02 4568
-C:/Users/aremus/D10/dbs/db_fixes_2021_03_04_15_51 4568
-C:/Users/aremus/D10/dbs/tds_live_2021_03_02 4568
-C:/Users/aremus/D10/dbs/tds_live_2021_03_02_translatins 4568
-C:/Users/aremus/D10/dbs/tds_live_2021_02_24 4567
-C:/Users/aremus/D10/dbs/tds_live_2021_03_26 2000
-C:/Users/aremus/D10/dbs/tds_live_2021_04_12 7777
-local_2021_04_28_08_39 2222
+# Last value is picked up
 # New format
 # db_name path_to_existing_db free_port
 "personal" "/home/nulysses/dbs/2222" 2222
+import "/home/nulysses/dbs/7777" 7777
 
 
 

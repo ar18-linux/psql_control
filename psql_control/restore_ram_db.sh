@@ -8,7 +8,13 @@ script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 function init_vars(){
   echo init_vars
-  . "${script_dir}/vars"
+  if [ -f "/home/$(logname)/.config/ar18/psql_control/vars" ]; then
+    . "/home/$(logname)/.config/ar18/psql_control/vars"
+    path_db_meta="/home/$(logname)/.config/ar18/psql_control/dbs.txt"
+  else
+    . "${script_dir}/vars"
+    path_db_meta="${script_dir}/dbs.txt"
+  fi
 }
 
 
@@ -17,6 +23,9 @@ function sanity_check(){
   if [[ "$(whoami)" != "root" ]]; then
     read -p "not root"
     exit 1
+  fi
+  if [ ! -f "${path_db_meta}" ]; then
+    read -p "db meta path not found: [${path_db_meta}]"
   fi
   echo "_7za: ${_7za}"
   echo "psql_dir: ${psql_dir}"
@@ -28,47 +37,40 @@ function sanity_check(){
 
 function restore(){
   pg_ctl="${psql_dir}/bin/pg_ctl"
-  str="$(grep '[[:alnum:]]' "${script_dir}/dbs.txt" | tail -n 1 | xargs)"
-  stringarray=($str)
-  source="${stringarray[0]}"
-  port="${stringarray[1]}"
-  sub_dir="default"
-  
-  if [ -n "$port" ]; then
-    sub_dir="${port}"
-  fi
-  
-  ram_db="${ram_db_dir}/${sub_dir}"
-  
-  read -p "restore ${str}?"
-  
-  #pid=$(head -1 "${ram_db}/postmaster.pid")
-  #taskkill //F //PID $pid || /bin/kill -INT $pid || "${pg_ctl}" -D "${ram_db}" stop
+  db_name_requested="$1"
+  backup_path="$2"
   set +e
-  su - "${db_user}" -c "${pg_ctl} -D ${ram_db} stop -m f"
+  str="$(cat "${path_db_meta}" | grep "${db_name_requested}")"
   set -e
-  #echo waiting 10 secs...
-  #sleep 10
-  
-  rm -rf "${ram_db}"
-  
-  mkdir -p "${ram_db}"
-  chown "${db_user}" "${ram_db}"
-  
-  su - "${db_user}" -c "${_7za} x -bsp1 ${target}/${source}.7z -aoa -o${ram_db}" 
-  
-  if [ -n "$port" ]; then
-    sed -i -E "s/#?port = .+/port = ${port}/" "${ram_db}/postgresql.conf"
-    #chown "${db_user}" "${ram_db}/postgresql.conf"
+  if [ "${str}" = "" ]; then
+    read -p "db not found: [${db_name_requested}]"
+    exit 1
   fi
+  stringarray=($str)
+  source="${stringarray[1]}"
+  source="${source%\"}"
+  source="${source#\"}"
+  port="${stringarray[2]}"
   
-  chmod 0700 "${ram_db}"
-  chown "${db_user}" "${ram_db}"
+  read -p "Restore ${str}?"
+  set +e
+  su - "${db_user}" -c "${pg_ctl} -D ${source} stop -m f"
+  set -e
   
-  echo "restored ${source}"
-  echo "Press a key"
-  su - "${db_user}" -c "${pg_ctl} -D ${ram_db} start"
-  #nohup su - "${db_user}" -c "${pg_ctl} -D ${ram_db} start" &
+  rm -rf "${source}"
+  
+  mkdir -p "${source}"
+  chown "${db_user}" "${source}"
+  
+  su - "${db_user}" -c "${_7za} x -bsp1 ${backup_path} -aoa -o${source}" 
+  
+  sed -i -E "s/#?port = .+/port = ${port}/" "${source}/postgresql.conf"
+  
+  chmod 0700 "${source}"
+  chown "${db_user}" "${source}"
+  
+  nohup su - "${db_user}" -c "${pg_ctl} -D ${source} start" &
+  read -p "Restored ${db_name_requested}"
 }
 
 
