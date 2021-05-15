@@ -1,4 +1,4 @@
-# Last value is picked up
+# Last value is picked up if no db_name specified
 # New format
 # db_name path_to_existing_db free_port
 "personal" "/home/nulysses/dbs/2222" 2222
