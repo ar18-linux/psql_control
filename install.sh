@@ -19,15 +19,15 @@ rm -rf "${install_dir}/${module_name}"
 cp -rf "${script_dir}/${module_name}" "${install_dir}/${module_name}"
 chmod +x "${install_dir}/${module_name}/"* -R
 
-mkdir -p "/home/${user_name}/.config/ar18/psql_control"
-chown "${user_name}:${user_name}" "/home/${user_name}/.config/ar18/psql_control"
+mkdir -p "/home/${user_name}/.config/ar18/${module_name}"
+chown "${user_name}:${user_name}" "/home/${user_name}/.config/ar18/${module_name}"
 
-if [ ! -f "/home/${user_name}/.config/ar18/psql_control/dbs.txt" ]; then
-  cp "${script_dir}/${module_name}/dbs.txt" "/home/${user_name}/.config/ar18/psql_control/dbs.txt"
-  chown "${user_name}:${user_name}" "/home/${user_name}/.config/ar18/psql_control/dbs.txt"
+if [ ! -f "/home/${user_name}/.config/ar18/${module_name}/dbs.txt" ]; then
+  cp "${script_dir}/${module_name}/dbs.txt" "/home/${user_name}/.config/ar18/${module_name}/dbs.txt"
+  chown "${user_name}:${user_name}" "/home/${user_name}/.config/ar18/${module_name}/dbs.txt"
 fi
 
-if [ ! -f "/home/${user_name}/.config/ar18/psql_control/vars" ]; then
-  cp "${script_dir}/${module_name}/vars" "/home/${user_name}/.config/ar18/psql_control/vars"
-  chown "${user_name}:${user_name}" "/home/${user_name}/.config/ar18/psql_control/vars"
+if [ ! -f "/home/${user_name}/.config/ar18/${module_name}/vars" ]; then
+  cp "${script_dir}/${module_name}/vars" "/home/${user_name}/.config/ar18/${module_name}/vars"
+  chown "${user_name}:${user_name}" "/home/${user_name}/.config/ar18/${module_name}/vars"
 fi
