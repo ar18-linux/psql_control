@@ -1,8 +1,11 @@
 # Path to 7z
 _7za=7za
 
-# Psql path
-psql_dir=/usr
+# Psql paths
+psql_dirs=( \
+  [9.4]="/usr/local/pgsql" \
+  [13.3]="/home/aremus/psql" \
+)
 
 # Path to db to operate one
 ram_db_dir=/home/nulysses/dbs

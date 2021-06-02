@@ -1,6 +1,6 @@
 # Last value is picked up if no db_name specified
 # New format
-# db_name path_to_existing_db free_port
+# unique_db_name db_path free_port psql_version
 "personal" "/home/nulysses/dbs/2222" 2222
 import "/home/nulysses/dbs/7777" 7777
 
