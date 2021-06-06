@@ -31,7 +31,7 @@ function start(){
     str="${db_name}"
   else
     set +e
-    str="$(cat "${path_db_meta}" | grep -E "^${db_name}")"
+    str="$(cat "${path_db_meta}" | grep -E "^[\"\']?${db_name}")"
     set -e
     declare -A lines
     lines[0]="${str}"
