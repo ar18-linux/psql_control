@@ -41,6 +41,7 @@ function start(){
     exit 1
   fi
   read -p "start ${str}?"
+  errors=0
   for line in "${lines[@]}"; do
     trimmed="$(echo $line | xargs)"
     if [ "${trimmed:0:1}" != "#" ]; then
@@ -58,6 +59,7 @@ function start(){
         ret=$?
         if [ "${ret}" != "0" ]; then
           echo "failed to start ${line}" >&2
+          errors=$((errors + 1))
         else
           echo "started ${source}"
         fi
@@ -67,8 +69,11 @@ function start(){
       set -e
     fi
   done
-  
-  read -p "Started ${str}, press a key"
+  if [ "${errors}" != "0" ]; then
+    read -p "Failed to start some entries, press a key"
+  else
+    read -p "Started ${str}, press a key"
+  fi
 }
 
 
