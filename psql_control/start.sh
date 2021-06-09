@@ -22,6 +22,7 @@ function sanity_check(){
 
 function start(){
   echo start
+  su - "${db_user}" -c "mkdir -p /run/postgres"
   if [ "${db_name}" = "" ]; then
     str="$(grep '[[:alnum:]]' "${path_db_meta}" | tail -n 1 | xargs)"
     declare -A lines
