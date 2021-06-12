@@ -1,8 +1,8 @@
 module_name="psql_control"
 
-if [ -z "${user_name+x}" ]; then
+if [ ! -v user_name ]; then
   user_name="$(logname)"
 fi
-if [ -z "${install_dir+x}" ]; then
+if [ ! -v install_dir ]; then
   install_dir="/opt/ar18"
 fi
