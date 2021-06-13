@@ -22,8 +22,8 @@ function sanity_check(){
 
 function start(){
   echo start
-  mkdir -p /run/postgres
-  chown "${db_user}:${db_user}" /run/postgres
+  mkdir -p /run/postgresql
+  chown "${db_user}:${db_user}" /run/postgresql
   if [ "${db_name}" = "" ]; then
     str="$(grep '[[:alnum:]]' "${path_db_meta}" | tail -n 1 | xargs)"
     declare -A lines
