@@ -1,3 +1,4 @@
+#!/bin/bash
 
 
 function read_configuration() {
@@ -102,8 +103,8 @@ function import_vars_helper() {
     . "/home/$(logname)/.config/ar18/psql_control/vars"
     path_db_meta="/home/$(logname)/.config/ar18/psql_control/dbs.txt"
   else
-    . "${script_dir}/vars"
-    path_db_meta="${script_dir}/dbs.txt"
+    . "${script_dir}/config/vars"
+    path_db_meta="${script_dir}/config/dbs.txt"
   fi
 }
 
