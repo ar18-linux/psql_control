@@ -3,9 +3,9 @@ _7za="7za"
 
 # Psql paths
 declare -Ag psql_dirs 
-psql_dirs=( \
-  [9.4]="/usr/local/pgsql" \
-  [13]="/home/aremus/psql" \
+psql_dirs=(
+  [9.4]="/usr/local/pgsql"
+  [13]="/home/aremus/psql"
 )
 
 # Path where imports take place
