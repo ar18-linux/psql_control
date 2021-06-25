@@ -40,7 +40,10 @@ function backup(){
     read -p "db not found: [${db_name}]"
     exit 1
   fi
-  read -p "Backup ${str}?"
+  if [ "${ask_for_confirmation}" = "1" ]; then
+    read -p "Backup ${str}?"
+  fi
+  
   if [ "${backup_path}" = "" ]; then
     backup_path="${backup_paths[0]}"
   fi
@@ -78,13 +81,19 @@ function backup(){
     fi
   done
   
-  read -p "Backed up ${str}, press a key"
+  if [ "${ask_for_confirmation}" = "1" ]; then
+    read -p "Backed up ${str}, press a key"
+  fi
 }
 
 
 function run(){
   db_name="$1"
   backup_path="$2"
+  ask_for_confirmation="${3}"
+  if [ "${ask_for_confirmation}" = "" ]; then
+    ask_for_confirmation="1"
+  fi
   init_vars
   sanity_check
   backup
