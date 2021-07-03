@@ -39,6 +39,7 @@ script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 curl -O https://raw.githubusercontent.com/ar18-linux/helper_functions/master/helper_functions/version_checker.sh
 . "${script_dir}/version_checker.sh"
 
+
 echo "exit$version"
 exit
 
