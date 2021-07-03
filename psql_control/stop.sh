@@ -1,9 +1,8 @@
 #!/bin/bash
 echo new2
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-
-rm -f "${script_dir}/version_checker.sh" 
-wget https://raw.githubusercontent.com/ar18-linux/helper_functions/master/helper_functions/version_checker.sh
+ 
+curl -O https://raw.githubusercontent.com/ar18-linux/helper_functions/master/helper_functions/version_checker.sh
 . "${script_dir}/version_checker.sh"
 
 
