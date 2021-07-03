@@ -6,7 +6,6 @@ wget https://raw.githubusercontent.com/ar18-linux/helper_functions/master/helper
 . "${script_dir}/version_checker.sh"
 
 
-
 exit
 
 set -e
