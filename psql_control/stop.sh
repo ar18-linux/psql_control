@@ -32,7 +32,7 @@ set -o pipefail
 set -eu
 #################################SCRIPT_START##################################
 
-version=3
+version=4
 echo new$version
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
  
