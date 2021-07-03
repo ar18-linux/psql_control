@@ -19,10 +19,10 @@ function read_configuration() {
 
 
 function sanity_check_helper() {
-  if [[ "$(whoami)" != "root" ]]; then
-    read -p "not root"
-    exit 1
-  fi
+  #if [[ "$(whoami)" != "root" ]]; then
+  #  read -p "not root"
+  #  exit 1
+  #fi
   echo "_7za: ${_7za}"
   echo "psql_dirs:"
   for KEY in "${!psql_dirs[@]}"; do
