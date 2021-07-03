@@ -1,5 +1,5 @@
 #!/bin/bash
-version=2
+version=3
 echo new$version
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
  
