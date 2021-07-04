@@ -70,6 +70,11 @@ function sanity_check(){
 
 function backup(){
   echo backup
+  ar18.script.import ar18.script.execute_with_sudo
+  ar18.script.import ar18.script.obtain_sudo_password
+  
+  ar18.script.obtain_sudo_password
+  
   if [ "${db_name}" = "" ]; then
     str="$(grep '[[:alnum:]]' "${path_db_meta}" | tail -n 1 | xargs)"
     declare -A lines
@@ -93,8 +98,6 @@ function backup(){
     read -p "Backup ${str}?"
     echo ""
   fi
-  
-  ar18.script.import ar18.script.execute_with_sudo
   
   if [ "${backup_path}" = "" ]; then
     backup_path="${backup_paths[0]}"
