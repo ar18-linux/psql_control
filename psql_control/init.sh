@@ -83,10 +83,7 @@ function prepare(){
   fi
   
   
-  ar18.script.import script.obtain_sudo_password
-  ar18.script.obtain_sudo_password
-  
-  ar18.script.obtain_sudo_password
+  ar18.script.import script.execute_with_sudo
   
   if [[ -d "${source}" ]]; then
     set +e
@@ -94,19 +91,19 @@ function prepare(){
     set -e
   fi
   
-  echo "${ar18_sudo_password}" | sudo -Sk rm -rf "${source}"
+  ar18.script.execute_with_sudo rm -rf "${source}"
   
-  echo "${ar18_sudo_password}" | sudo -Sk mkdir -p "${source}"
-  echo "${ar18_sudo_password}" | sudo -Sk chmod 0700 "${source}"
-  echo "${ar18_sudo_password}" | sudo -Sk chown "${db_user}" "${source}"
+  ar18.script.execute_with_sudo mkdir -p "${source}"
+  ar18.script.execute_with_sudo chmod 0700 "${source}"
+  ar18.script.execute_with_sudo chown "${db_user}" "${source}"
   
-  echo "${ar18_sudo_password}" | sudo -Sk su - "${db_user}" -c "${init_db} -D ${source} -E utf-8"
-  echo "${ar18_sudo_password}" | sudo -Sk sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" "${source}/postgresql.conf"
-  echo "${ar18_sudo_password}" | sudo -Sk sed -i "s/#port = 5432/port = ${port}/g" "${source}/postgresql.conf"
-  echo "${ar18_sudo_password}" | sudo -Sk su - "${db_user}" -c "echo \"host  all  all 0.0.0.0/0 md5\" >> ${source}/pg_hba.conf"
+  ar18.script.execute_with_sudo su - "${db_user}" -c "${init_db} -D ${source} -E utf-8"
+  ar18.script.execute_with_sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" "${source}/postgresql.conf"
+  ar18.script.execute_with_sudo sed -i "s/#port = 5432/port = ${port}/g" "${source}/postgresql.conf"
+  ar18.script.execute_with_sudo su - "${db_user}" -c "echo \"host  all  all 0.0.0.0/0 md5\" >> ${source}/pg_hba.conf"
   
-  echo "${ar18_sudo_password}" | sudo -Sk su - "${db_user}" -c "${pg_ctl} -D ${source} start"
-  echo "${ar18_sudo_password}" | sudo -Sk su - "${db_user}" -c "${my_psql} -p ${port} -d postgres -c \"ALTER USER ${db_user} PASSWORD 'postgres';\""
+  ar18.script.execute_with_sudo su - "${db_user}" -c "${pg_ctl} -D ${source} start"
+  ar18.script.execute_with_sudo su - "${db_user}" -c "${my_psql} -p ${port} -d postgres -c \"ALTER USER ${db_user} PASSWORD 'postgres';\""
 }
 
 
