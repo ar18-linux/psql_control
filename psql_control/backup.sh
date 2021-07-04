@@ -92,14 +92,14 @@ function backup(){
     echo ""
   fi
   
-  ar18.script.import script.obtain_sudo_password
-  ar18.script.obtain_sudo_password
+  ar18.script.import ar18.script.execute_with_sudo
   
   if [ "${backup_path}" = "" ]; then
     backup_path="${backup_paths[0]}"
   fi
   mkdir -p "${backup_path}"
-  echo "${ar18_sudo_password}" | sudo -Sk chmod 0777 "${backup_path}" -R
+  ar18.script.execute_with_sudo chmod 0777 "${backup_path}" -R
+  #echo "${ar18_sudo_password}" | sudo -Sk 
   for line in "${lines[@]}"; do
     trimmed="$(echo $line | xargs)"
     if [ "${trimmed:0:1}" != "#" ]; then
@@ -111,7 +111,8 @@ function backup(){
   
       date="$(generate_timestamp)"
       set +e
-      echo "${ar18_sudo_password}" | sudo -Sk su - "${db_user}" -c "${pg_ctl} -D ${source} stop -m f"
+      ar18.script.execute_with_sudo su - "${db_user}" -c "${pg_ctl} -D ${source} stop -m f"
+      #echo "${ar18_sudo_password}" | sudo -Sk 
       database_version="$(cat "${source}/PG_VERSION")"
       set -e
       if [ "${database_version}" = "" ]; then
@@ -121,11 +122,14 @@ function backup(){
         path_db_7z="${backup_path}/${backup_name}.7z"
         
         echo "creating 7z archive..."
-        "${_7za}" a -bsp1 "${path_db_7z}" "${source}/*" 
+        ar18.script.execute_with_sudo "${_7za}" a -bsp1 "${path_db_7z}" "${source}/*" 
+        #"${_7za}" a -bsp1 "${path_db_7z}" "${source}/*" 
         
-        echo "${ar18_sudo_password}" | sudo -Sk chmod 0777 "${path_db_7z}"
+        ar18.script.execute_with_sudo chmod 0777 "${path_db_7z}"
+        #echo "${ar18_sudo_password}" | sudo -Sk chmod 0777 "${path_db_7z}"
         
-        echo "${ar18_sudo_password}" | sudo -Sk su - "${db_user}" -c "${pg_ctl} -D ${source} start"
+        ar18.script.execute_with_sudo su - "${db_user}" -c "${pg_ctl} -D ${source} start"
+        #echo "${ar18_sudo_password}" | sudo -Sk su - "${db_user}" -c "${pg_ctl} -D ${source} start"
       fi
     fi
   done
@@ -138,8 +142,8 @@ function backup(){
 
 function run(){
   db_name="$1"
-  backup_path="$2"
   set +u
+  backup_path="$2"
   ask_for_confirmation="${3}"
   set -u
   if [ "${ask_for_confirmation}" = "" ]; then

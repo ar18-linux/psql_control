@@ -16,8 +16,8 @@ dump_path="/home/nulysses/dbs_dumps"
 
 # Path to backup dbs
 declare -ag backup_paths
-backup_paths=( \
-  "/home/aremus/D10/dbs" \
+backup_paths=(
+  "/home/aremus/D10/dbs"
 )
 
 # Database user
