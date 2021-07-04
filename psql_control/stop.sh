@@ -32,7 +32,7 @@ set -o pipefail
 set -eu
 #################################SCRIPT_START##################################
 
-curl -O https://raw.githubusercontent.com/ar18-linux/ar18_lib_bash/master/ar18_lib_bash/import.sh && . "${script_dir}/import.sh"
+curl -O https://raw.githubusercontent.com/ar18-linux/ar18_lib_bash/master/ar18_lib_bash/script/import.sh && . "${script_dir}/import.sh"
 ar18.script.import ar18.script.version_check
 ar18.script.version_check
 
