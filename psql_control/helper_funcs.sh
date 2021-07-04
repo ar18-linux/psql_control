@@ -19,10 +19,6 @@ function read_configuration() {
 
 
 function sanity_check_helper() {
-  #if [[ "$(whoami)" != "root" ]]; then
-  #  read -p "not root"
-  #  exit 1
-  #fi
   echo "_7za: ${_7za}"
   echo "psql_dirs:"
   for KEY in "${!psql_dirs[@]}"; do
@@ -99,9 +95,9 @@ function generate_timestamp() {
 
 
 function import_vars_helper() {
-  if [ -f "/home/$(logname)/.config/ar18/psql_control/vars" ]; then
-    . "/home/$(logname)/.config/ar18/psql_control/vars"
-    path_db_meta="/home/$(logname)/.config/ar18/psql_control/dbs.txt"
+  if [ -f "/home/$(whoami)/.config/ar18/psql_control/vars" ]; then
+    . "/home/$(whoami)/.config/ar18/psql_control/vars"
+    path_db_meta="/home/$(whoami)/.config/ar18/psql_control/dbs.txt"
   else
     . "${script_dir}/config/vars"
     path_db_meta="${script_dir}/config/dbs.txt"

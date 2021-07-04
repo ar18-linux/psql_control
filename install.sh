@@ -3,7 +3,7 @@
 
 # Prepare script environment
 {
-  # Script template version 2021-07-04_12:24:18
+  # Script template version 2021-07-04_13:46:46
   # Make sure some modification to LD_PRELOAD will not alter the result or outcome in any way
   LD_PRELOAD_old="${LD_PRELOAD}"
   LD_PRELOAD=
@@ -22,16 +22,29 @@
     ar18_sourced_map["${script_path}"]=0
   fi
   # Initialise exit code
-  if [ -z "${ar18_exit_map+x}" ]; then
+  if [ ! -v ar18_exit_map ]; then
     declare -A -g ar18_exit_map
   fi
   ar18_exit_map["${script_path}"]=0
+  # Save PWD
+  if [ ! -v ar18_pwd_map ]; then
+    declare -A -g ar18_pwd_map
+  fi
+  ar18_pwd_map["${script_path}"]="${PWD}"
   # Get old shell option values to restore later
   shopt -s inherit_errexit
   IFS=$'\n' shell_options=($(shopt -op))
   # Set shell options for this script
   set -o pipefail
   set -eu
+  if [ ! -v ar18_parent_process ]; then
+    export ar18_parent_process="$$"
+  fi
+  # Get import module
+  mkdir -p "/tmp/${ar18_parent_process}"
+  cd "/tmp/${ar18_parent_process}"
+  curl -O https://raw.githubusercontent.com/ar18-linux/ar18_lib_bash/master/ar18_lib_bash/script/import.sh && . "/tmp/${ar18_parent_process}/import.sh"
+  cd "${ar18_pwd_map["${script_path}"]}"
 }
 #################################SCRIPT_START##################################
 
@@ -51,6 +64,8 @@ ar18_install "${install_dir}" "${module_name}" "${script_dir}"
   done
   # Restore LD_PRELOAD
   LD_PRELOAD="${LD_PRELOAD_old}"
+  # Restore PWD
+  cd "${ar18_pwd_map["${script_path}"]}"
 }
 # Return or exit depending on whether the script was sourced or not
 {

@@ -8,7 +8,7 @@ function ar18.script._import(){
   function ar18.script.import() {
     # Prepare script environment
     {
-      # Function template version 2021-07-04_12:24:18
+      # Function template version 2021-07-04_13:46:46
       local LD_PRELOAD_old
       LD_PRELOAD_old="${LD_PRELOAD}"
       LD_PRELOAD=
@@ -21,6 +21,7 @@ function ar18.script._import(){
       set +x
     }
     ##############################FUNCTION_START#################################
+  
   
   
     set -x
@@ -52,9 +53,11 @@ function ar18.script._import(){
       done
       LD_PRELOAD="${LD_PRELOAD_old}"
     }
+    
     return "${ret}"
+    
   }
-      
+        
    
 }
 
