@@ -1,7 +1,8 @@
 # Last value is picked up if no db_name specified
+# TAB separation
 
-# unique_db_name db_path free_port psql_version
-tds_latest "/dev/shm/dbs/tds_latest" 2000 9.4
-import_server "/dev/shm/dbs/7777" 7777 13
+# unique_db_name	db_path	free_port	psql_version
+tds_latest	"/dev/shm/dbs/tds_latest"	2000	9.4
+import_server	"/dev/shm/dbs/7777"	7777	13
 
 

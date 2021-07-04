@@ -1,9 +1,55 @@
 #!/bin/bash
+# ar18
 
-set -e
-set -x
+# Prepare script environment
+{
+  # Script template version 2021-07-04_13:52:40
+  # Make sure some modification to LD_PRELOAD will not alter the result or outcome in any way
+  LD_PRELOAD_old="${LD_PRELOAD}"
+  LD_PRELOAD=
+  # Determine the full path of the directory this script is in
+  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+  script_path="${script_dir}/$(basename "${0}")"
+  #Set PS4 for easier debugging
+  export PS4='\e[35m${BASH_SOURCE[0]}:${LINENO}: \e[39m'
+  # Determine if this script was sourced or is the parent script
+  if [ ! -v ar18_sourced_map ]; then
+    declare -A -g ar18_sourced_map
+  fi
+  if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
+    ar18_sourced_map["${script_path}"]=1
+  else
+    ar18_sourced_map["${script_path}"]=0
+  fi
+  # Initialise exit code
+  if [ ! -v ar18_exit_map ]; then
+    declare -A -g ar18_exit_map
+  fi
+  ar18_exit_map["${script_path}"]=0
+  # Save PWD
+  if [ ! -v ar18_pwd_map ]; then
+    declare -A -g ar18_pwd_map
+  fi
+  ar18_pwd_map["${script_path}"]="${PWD}"
+  # Get old shell option values to restore later
+  shopt -s inherit_errexit
+  IFS=$'\n' shell_options=($(shopt -op))
+  # Set shell options for this script
+  set -o pipefail
+  set -eu
+  if [ ! -v ar18_parent_process ]; then
+    export ar18_parent_process="$$"
+  fi
+  # Get import module
+  mkdir -p "/tmp/${ar18_parent_process}"
+  cd "/tmp/${ar18_parent_process}"
+  curl -O https://raw.githubusercontent.com/ar18-linux/ar18_lib_bash/master/ar18_lib_bash/script/import.sh && . "/tmp/${ar18_parent_process}/import.sh"
+  cd "${ar18_pwd_map["${script_path}"]}"
+}
+#################################SCRIPT_START##################################
 
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+ar18.script.import script.version_check
+ar18.script.version_check
 
 . "${script_dir}/helper_funcs.sh"
 
@@ -22,8 +68,10 @@ function sanity_check(){
 
 function start(){
   echo start
-  mkdir -p /run/postgresql
-  chown "${db_user}:${db_user}" /run/postgresql
+  ar18.script.import script.obtain_sudo_password
+  ar18.script.obtain_sudo_password
+  echo "${ar18_sudo_password}" | sudo -Sk mkdir -p /run/postgresql
+  echo "${ar18_sudo_password}" | sudo -Sk chown "${db_user}:${db_user}" /run/postgresql
   if [ "${db_name}" = "" ]; then
     str="$(grep '[[:alnum:]]' "${path_db_meta}" | tail -n 1 | xargs)"
     declare -A lines
@@ -40,9 +88,11 @@ function start(){
   fi
   if [ "${lines[0]}" = "" ]; then
     read -p "db not found: [${db_name}]"
+    echo ""
     exit 1
   fi
   read -p "start ${str}?"
+  echo ""
   errors=0
   for line in "${lines[@]}"; do
     trimmed="$(echo $line | xargs)"
@@ -53,28 +103,33 @@ function start(){
       pid=-1
       if [ -f "${source}/postmaster.pid" ]; then
         pid="$(cat "${source}/postmaster.pid" | head -1)"
-        kill -0 "${pid}" || pid=-1
+        echo "${ar18_sudo_password}" | sudo -Sk kill -0 "${pid}" || pid=-1
       fi
       set +e
       if [ "${pid}" = "-1" ]; then
-        su - "${db_user}" -c "${pg_ctl} -D ${source} start"
+        echo "${ar18_sudo_password}" | sudo -Sk su - "${db_user}" -c "${pg_ctl} -D ${source} start"
         ret=$?
         if [ "${ret}" != "0" ]; then
           echo "failed to start ${line}" >&2
+          echo ""
           errors=$((errors + 1))
         else
           echo "started ${source}"
+          echo ""
         fi
       else
         echo "already started: ${source}"
+        echo ""
       fi
       set -e
     fi
   done
   if [ "${errors}" != "0" ]; then
     read -p "Failed to start some entries, press a key"
+    echo ""
   else
     read -p "Started ${str}, press a key"
+    echo ""
   fi
 }
 
@@ -88,3 +143,25 @@ function run(){
 
 
 run "$@"
+
+##################################SCRIPT_END###################################
+# Restore environment
+{
+  # Restore old shell values
+  set +x
+  for option in "${shell_options[@]}"; do
+    eval "${option}"
+  done
+  # Restore LD_PRELOAD
+  LD_PRELOAD="${LD_PRELOAD_old}"
+  # Restore PWD
+  cd "${ar18_pwd_map["${script_path}"]}"
+}
+# Return or exit depending on whether the script was sourced or not
+{
+  if [ "${ar18_sourced_map["${script_path}"]}" = "1" ]; then
+    return "${ar18_exit_map["${script_path}"]}"
+  else
+    exit "${ar18_exit_map["${script_path}"]}"
+  fi
+}

@@ -3,7 +3,7 @@
 
 # Prepare script environment
 {
-  # Script template version 2021-07-04_13:46:46
+  # Script template version 2021-07-04_13:52:40
   # Make sure some modification to LD_PRELOAD will not alter the result or outcome in any way
   LD_PRELOAD_old="${LD_PRELOAD}"
   LD_PRELOAD=
@@ -49,10 +49,7 @@
 #################################SCRIPT_START##################################
 
 ar18.script.import script.version_check
-ar18.script.import script.obtain_sudo_password
-
 ar18.script.version_check
-ar18.script.obtain_sudo_password
 
 . "${script_dir}/helper_funcs.sh"
 
@@ -96,6 +93,8 @@ function stop(){
       source="$(read_source_part "${line}")"
       pg_ver="$(read_version_part "${line}")"
       pg_ctl="$(fetch_psql_dir "${pg_ver}")/bin/pg_ctl"
+      ar18.script.import script.obtain_sudo_password
+      ar18.script.obtain_sudo_password
       set +e
       echo "${ar18_sudo_password}" | sudo -Sk su - "${db_user}" -c "${pg_ctl} -D ${source} stop -m f"
       set -e
@@ -103,6 +102,7 @@ function stop(){
   done
   
   read -p "Stopped ${str}, press a key"
+  echo ""
 }
 
 
