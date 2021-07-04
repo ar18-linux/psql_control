@@ -3,7 +3,7 @@
 
 # Prepare script environment
 {
-  # Script template version 2021-07-04_15:02:00
+  # Script template version 2021-07-04_17:50:00
   # Make sure some modification to LD_PRELOAD will not alter the result or outcome in any way
   LD_PRELOAD_old="${LD_PRELOAD}"
   LD_PRELOAD=
@@ -41,10 +41,12 @@
     export ar18_parent_process="$$"
   fi
   # Get import module
-  mkdir -p "/tmp/${ar18_parent_process}"
-  cd "/tmp/${ar18_parent_process}"
-  curl -O https://raw.githubusercontent.com/ar18-linux/ar18_lib_bash/master/ar18_lib_bash/script/import.sh && . "/tmp/${ar18_parent_process}/import.sh"
-  cd "${ar18_pwd_map["${script_path}"]}"
+  if [ ! -v ar18.script.import ]; then
+    mkdir -p "/tmp/${ar18_parent_process}"
+    cd "/tmp/${ar18_parent_process}"
+    curl -O https://raw.githubusercontent.com/ar18-linux/ar18_lib_bash/master/ar18_lib_bash/script/import.sh > /dev/null 2>&1 && . "/tmp/${ar18_parent_process}/import.sh"
+    cd "${ar18_pwd_map["${script_path}"]}"
+  fi
 }
 #################################SCRIPT_START##################################
 

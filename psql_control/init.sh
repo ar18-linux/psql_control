@@ -3,7 +3,7 @@
 
 # Prepare script environment
 {
-  # Script template version 2021-07-04_15:02:00
+  # Script template version 2021-07-04_17:50:00
   # Make sure some modification to LD_PRELOAD will not alter the result or outcome in any way
   LD_PRELOAD_old="${LD_PRELOAD}"
   LD_PRELOAD=
@@ -41,10 +41,12 @@
     export ar18_parent_process="$$"
   fi
   # Get import module
-  mkdir -p "/tmp/${ar18_parent_process}"
-  cd "/tmp/${ar18_parent_process}"
-  curl -O https://raw.githubusercontent.com/ar18-linux/ar18_lib_bash/master/ar18_lib_bash/script/import.sh && . "/tmp/${ar18_parent_process}/import.sh"
-  cd "${ar18_pwd_map["${script_path}"]}"
+  if [ ! -v ar18.script.import ]; then
+    mkdir -p "/tmp/${ar18_parent_process}"
+    cd "/tmp/${ar18_parent_process}"
+    curl -O https://raw.githubusercontent.com/ar18-linux/ar18_lib_bash/master/ar18_lib_bash/script/import.sh > /dev/null 2>&1 && . "/tmp/${ar18_parent_process}/import.sh"
+    cd "${ar18_pwd_map["${script_path}"]}"
+  fi
 }
 #################################SCRIPT_START##################################
 
@@ -72,6 +74,8 @@ function prepare(){
   set -e
   source="$(read_source_part "${str}")"
   port="$(read_port_part "${str}")"
+  password="postgres"
+  database="postgres"
   pg_ver="$(read_version_part "${str}")"
   pg_ctl="$(fetch_psql_dir "${pg_ver}")/bin/pg_ctl"
   my_psql="$(fetch_psql_dir "${pg_ver}")/bin/psql"
@@ -87,7 +91,7 @@ function prepare(){
   
   if [[ -d "${source}" ]]; then
     set +e
-    echo "${ar18_sudo_password}" | sudo -Sk su - "${db_user}" -c "${pg_ctl} -D ${source} stop  -m f"
+    ar18.script.execute_with_sudo su - "${db_user}" -c "${pg_ctl} -D ${source} stop  -m f"
     set -e
   fi
   
@@ -103,7 +107,8 @@ function prepare(){
   ar18.script.execute_with_sudo su - "${db_user}" -c "echo \"host  all  all 0.0.0.0/0 md5\" >> ${source}/pg_hba.conf"
   
   ar18.script.execute_with_sudo su - "${db_user}" -c "${pg_ctl} -D ${source} start"
-  ar18.script.execute_with_sudo su - "${db_user}" -c "${my_psql} -p ${port} -d postgres -c \"ALTER USER ${db_user} PASSWORD 'postgres';\""
+  ar18.script.execute_with_sudo chmod +x "${script_dir}/passwd.sh"
+  ar18.script.execute_with_sudo su - "${db_user}" -c "${my_psql} -p ${port} -d postgres -c \"${script_dir}/passwd.sh ${port} ${database} ${db_user} ${password}\""
 }
 
 
