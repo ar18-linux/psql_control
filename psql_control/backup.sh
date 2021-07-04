@@ -115,9 +115,12 @@ function backup(){
       set +e
       ar18.script.execute_with_sudo su - "${db_user}" -c "${pg_ctl} -D ${source} stop -m f"
       #echo "${ar18_sudo_password}" | sudo -Sk 
-      database_version="$(cat "${source}/PG_VERSION")"
+      database_version="$(ar18.script.execute_with_sudo cat "${source}/PG_VERSION")"
+      local ar18_error
+      ar18_error=0
       set -e
       if [ "${database_version}" = "" ]; then
+        ar18_error=1
         echo "failed to backup ${line}: could not determine version"
       else
         backup_name="${this_db_name}__${database_version}__${date}"
@@ -135,9 +138,13 @@ function backup(){
       fi
     fi
   done
-  
-  if [ "${ask_for_confirmation}" = "1" ]; then
-    read -p "Backed up ${str}, press a key"
+  if [ "${ar18_error}" = "0" ]; then
+    if [ "${ask_for_confirmation}" = "1" ]; then
+      read -p "Backed up ${str}, press a key"
+    fi
+  else
+    read -p "Failed to back up ${str}"
+    exit 1
   fi
 }
 

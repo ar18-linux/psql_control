@@ -99,7 +99,7 @@ function prepare(){
   
   ar18.script.execute_with_sudo mkdir -p "${source}"
   ar18.script.execute_with_sudo chmod 0700 "${source}"
-  ar18.script.execute_with_sudo chown "${db_user}" "${source}"
+  ar18.script.execute_with_sudo chown "${db_user}:${db_user}" "${source}"
   
   ar18.script.execute_with_sudo su - "${db_user}" -c "${init_db} -D ${source} -E utf-8"
   ar18.script.execute_with_sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" "${source}/postgresql.conf"
