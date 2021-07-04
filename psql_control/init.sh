@@ -108,7 +108,7 @@ function prepare(){
   
   ar18.script.execute_with_sudo su - "${db_user}" -c "${pg_ctl} -D ${source} start"
   ar18.script.execute_with_sudo chmod +x "${script_dir}/passwd.sh"
-  ar18.script.execute_with_sudo su - "${db_user}" -c "${my_psql} -p ${port} -d postgres -c \"${script_dir}/passwd.sh ${port} ${database} ${db_user} ${password}\""
+  ar18.script.execute_with_sudo su - "${db_user}" -c "${script_dir}/passwd.sh ${port} ${database} ${db_user} ${password} ${my_psql}"
 }
 
 

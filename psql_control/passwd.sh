@@ -39,8 +39,9 @@ port="${1}"
 database="${2}"
 user="${3}"
 password="${4}"
+psql_ctl="${5}"
 
-/usr/bin/psql -p "${port}" -d "${database}" -c "ALTER USER ${user} PASSWORD '${password}';"
+"${psql_ctl}" -p "${port}" -d "${database}" -c "ALTER USER ${user} PASSWORD '${password}';"
 
 ##################################SCRIPT_END###################################
 # Restore old shell values
