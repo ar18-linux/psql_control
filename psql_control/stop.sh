@@ -31,12 +31,10 @@ IFS=$'\n' shell_options=($(shopt -op))
 set -o pipefail
 set -eu
 #################################SCRIPT_START##################################
-# Download ar18_lib_bash init -> import -> version_checker as function
+
 curl -O https://raw.githubusercontent.com/ar18-linux/ar18_lib_bash/master/ar18_lib_bash/import.sh && . "${script_dir}/import.sh"
 ar18.script.import ar18.script.version_check
 ar18.script.version_check
-
-curl -O https://raw.githubusercontent.com/ar18-linux/helper_functions/master/helper_functions/version_checker.sh && . "${script_dir}/version_checker.sh"
 
 . "${script_dir}/helper_funcs.sh"
 
