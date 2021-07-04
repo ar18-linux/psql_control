@@ -31,50 +31,12 @@ IFS=$'\n' shell_options=($(shopt -op))
 set -o pipefail
 set -eu
 #################################SCRIPT_START##################################
+# Download ar18_lib_bash init -> import -> version_checker as function
+curl -O https://raw.githubusercontent.com/ar18-linux/ar18_lib_bash/master/ar18_lib_bash/import.sh && . "${script_dir}/import.sh"
+ar18.script.import ar18.script.version_check
+ar18.script.version_check
 
-version=5
-echo new$version
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
- 
-curl -O https://raw.githubusercontent.com/ar18-linux/helper_functions/master/helper_functions/version_checker.sh
-. "${script_dir}/version_checker.sh"
-
-
-echo "exit$version"
-exit
-
-##################################SCRIPT_END###################################
-# Restore old shell values
-set +x
-for option in "${shell_options[@]}"; do
-  eval "${option}"
-done
-# Restore LD_PRELOAD
-LD_PRELOAD="${LD_PRELOAD_old}"
-# Return or exit depending on whether the script was sourced or not
-if [ "${ar18_sourced_map["${script_path}"]}" = "1" ]; then
-  return "${ar18_exit_map["${script_path}"]}"
-else
-  exit "${ar18_exit_map["${script_path}"]}"
-fi
-
-
-
-#!/bin/bash
-version=3
-echo new$version
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
- 
-curl -O https://raw.githubusercontent.com/ar18-linux/helper_functions/master/helper_functions/version_checker.sh
-. "${script_dir}/version_checker.sh"
-
-echo "exit$version"
-exit
-
-set -e
-set -x
-
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+curl -O https://raw.githubusercontent.com/ar18-linux/helper_functions/master/helper_functions/version_checker.sh && . "${script_dir}/version_checker.sh"
 
 . "${script_dir}/helper_funcs.sh"
 
@@ -137,3 +99,18 @@ function run(){
 
 
 run "$@"
+
+##################################SCRIPT_END###################################
+# Restore old shell values
+set +x
+for option in "${shell_options[@]}"; do
+  eval "${option}"
+done
+# Restore LD_PRELOAD
+LD_PRELOAD="${LD_PRELOAD_old}"
+# Return or exit depending on whether the script was sourced or not
+if [ "${ar18_sourced_map["${script_path}"]}" = "1" ]; then
+  return "${ar18_exit_map["${script_path}"]}"
+else
+  exit "${ar18_exit_map["${script_path}"]}"
+fi
