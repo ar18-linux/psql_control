@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ar18
 
 # Prepare script environment
 {
-  # Script template version 2021-07-04_17:50:00
+  # Script template version 2021-07-06_08:05:30
   # Make sure some modification to LD_PRELOAD will not alter the result or outcome in any way
   LD_PRELOAD_old="${LD_PRELOAD}"
   LD_PRELOAD=
