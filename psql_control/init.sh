@@ -217,7 +217,9 @@ function prepare(){
   fi
   
   
-  ar18.script.import script.execute_with_sudo
+  ar18.script.import ar18.script.execute_with_sudo
+  ar18.script.execute_with_sudo mkdir -p /run/postgresql
+  ar18.script.execute_with_sudo chown "${db_user}:${db_user}" "/run/postgresql"
   
   if [[ -d "${source}" ]]; then
     set +e
