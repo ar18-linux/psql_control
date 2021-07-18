@@ -181,7 +181,7 @@ trap 'err_report "${BASH_SOURCE[0]}" ${LINENO} "${BASH_COMMAND}"' ERR
 #################################SCRIPT_START##################################
 
 ar18.script.import script.version_check
-ar18.script.version_check
+ar18.script.version_check "${@}"
 
 . "${script_dir}/helper_funcs.sh"
 
