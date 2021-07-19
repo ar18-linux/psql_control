@@ -197,7 +197,7 @@ threads="4"
 declare -A psql_sources
 psql_sources["13"]="https://ftp.postgresql.org/pub/source/v13.3/postgresql-13.3.tar.bz2"
 
-my_install_dir="$(cat "/home/$(whoami)/.config/ar18.psql_control/INSTALL_DIR")"
+my_install_dir="$(cat "/home/$(whoami)/.config/ar18/psql_control/INSTALL_DIR")"
 
 psql_ver="${1}"
 ar18.script.execute_with_sudo rm -rf "${temp_dir}"
@@ -206,8 +206,7 @@ cd "${temp_dir}"
 wget "${psql_sources["${psql_ver}"]}"
 bzip2 -dk *.bz2
 tar -xvf *.tar
-
-psql_src_dir="$(realpath "${2}")"
+psql_src_dir="$(realpath "$(ls -d -1 "${temp_dir}/"*/)")"
 psql_sub_dir="$(basename "${psql_src_dir}")"
 mkdir -p "${script_dir}/../bin/psql"
 
